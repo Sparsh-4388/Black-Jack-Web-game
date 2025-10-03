@@ -120,7 +120,7 @@ function render_game(){
         message = "Wohooo! You've got BlackJack! 🥳"
         hasBlackJack = true
         isAlive = false
-        updateChips(10); 
+        updateChips(100); 
         setTimeout(resetGame, 1500);
     }
     else {
@@ -149,4 +149,26 @@ function new_card(){
         calculateScore(); 
         render_game();
     }
+}
+
+function Buy_in() {
+    const chipsInput = prompt("Amount Buy-in: ")
+
+    if(chipsInput === null || chipsInput.trim() === ""){
+        alert("Buy in cancelled!!")
+        return
+    }
+
+    const newchipsAmount = parseInt(chipsInput)
+
+    if(isNaN(chipsInput) || chipsInput <= 0){
+        alert("Please enter the valid amount")
+        return
+    }
+
+    player.chips = newchipsAmount
+
+    localStorage.setItem("blackJackChips", player.chips)
+    document.getElementById("player-el").textContent = player.name + ": $" + player.chips;
+    
 }
