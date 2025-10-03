@@ -1,13 +1,22 @@
-
 let cards = []
 let sum = 0
 let hasBlackJack = false
 let isAlive = false
 let message = ""
 
+
+let initialChips = localStorage.getItem("blackJackChips")
+
+if(initialChips === null || isNaN(parseInt(initialChips))){
+    initialChips = 20
+}
+else{
+    initialChips = parseInt(initialChips)
+}
+
 let player = {
     name: "Player",
-    chips: 20
+    chips: initialChips 
 }
 
 let gameDeck = []; 
@@ -64,14 +73,27 @@ function calculateScore() {
 
 function updateChips(amount){
     player.chips += amount;
+
+    localStorage.setItem("blackJackChips", player.chips)
+    
     document.getElementById("player-el").textContent = player.name + ": $" + player.chips;
 }
 
-function refresh(){
-    location.reload(); 
+
+function resetGame() {
+    document.getElementById("cards-el").textContent = "Cards: ";
+
+    document.getElementById("sum-el").textContent = 0; 
+
+    cards = [];
+    sum = 0;
+    hasBlackJack = false;
+    isAlive = false; 
+    
+    document.getElementById("start-el").disabled = false;
+
+    document.getElementById("message-el").textContent = "Click 'START GAME' to play a new round!";
 }
-
-
 
 function start_game(){
     cards = []
@@ -99,13 +121,13 @@ function render_game(){
         hasBlackJack = true
         isAlive = false
         updateChips(10); 
-        setTimeout(refresh, 1000);
+        setTimeout(resetGame, 1500);
     }
     else {
         message = "You are out of the game! 😭"
         isAlive = false
         updateChips(-10); 
-        setTimeout(refresh, 1000);
+        setTimeout(resetGame, 1500);
     }
 
     document.getElementById("message-el").textContent = message
@@ -114,10 +136,6 @@ function render_game(){
     document.getElementById("cards-el").textContent = "Cards: "
     for(let i = 0; i < cards.length; i++){
         document.getElementById("cards-el").textContent += cards[i] + " "
-    }
-
-    if (!isAlive) {
-        document.getElementById("start-el").disabled = false;
     }
 }
 
