@@ -30,7 +30,7 @@ A simplified, single-player version of Blackjack where the challenge is to reach
 
 Play strategically, manage your chips wisely, and aim to hit 21 without going over.
 
-## Tech Stack (example)
+## Tech Stack
 
 * HTML, CSS, JavaScript
 
