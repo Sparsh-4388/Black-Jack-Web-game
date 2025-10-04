@@ -1,27 +1,25 @@
-let cards = []
-let sum = 0
-let hasBlackJack = false
-let isAlive = false
-let message = ""
+let cards = [];
+let sum = 0;
+let hasBlackJack = false;
+let isAlive = false;
+let message = "";
 
+let initialChips = localStorage.getItem("blackJackChips");
 
-let initialChips = localStorage.getItem("blackJackChips")
-
-if(initialChips === null || isNaN(parseInt(initialChips))){
-    initialChips = 20
-}
-else{
-    initialChips = parseInt(initialChips)
+if (initialChips === null || isNaN(parseInt(initialChips))) {
+    initialChips = 20;
+} else {
+    initialChips = parseInt(initialChips);
 }
 
 let player = {
     name: "Player",
     chips: initialChips 
-}
+};
 
 let gameDeck = []; 
 
-document.getElementById("player-el").textContent = player.name + ": $" + player.chips
+document.getElementById("player-el").textContent = player.name + ": $" + player.chips;
 
 function createDeck() {
     const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
@@ -39,18 +37,17 @@ function shuffleDeck(deck) {
     let currentIndex = deck.length;
     let randomIndex;
 
-    while(currentIndex !== 0){
-        randomIndex = Math.floor(Math.random() * currentIndex)
-        currentIndex --
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
 
-        [deck[currentIndex], deck[randomIndex]] = [deck[randomIndex], deck[currentIndex]]
+        [deck[currentIndex], deck[randomIndex]] = [deck[randomIndex], deck[currentIndex]];
     }
 }
 
 function getRandomCard() {
     return gameDeck.shift(); 
 }
-
 
 function calculateScore() {
     let score = 0;
@@ -71,104 +68,180 @@ function calculateScore() {
     sum = score;
 }
 
-function updateChips(amount){
-    player.chips += amount;
 
-    localStorage.setItem("blackJackChips", player.chips)
-    
+function updateChips(amount) {
+    player.chips += amount;
+    localStorage.setItem("blackJackChips", player.chips);
     document.getElementById("player-el").textContent = player.name + ": $" + player.chips;
+
+    if (player.chips <= 0) {  
+        document.getElementById("start-el").disabled = true;
+        document.getElementById("new-card-el").disabled = true;
+        
+        if (document.getElementById("buy-in-el")) {
+            document.getElementById("buy-in-el").disabled = false;
+        }
+    } 
+}
+
+function render_game() {
+    if (player.chips <= 0 && sum === 0) {
+        return; 
+    }
+    
+    document.getElementById("sum-el").textContent = sum;
+    document.getElementById("cards-el").textContent = "Cards: ";
+    for (let i = 0; i < cards.length; i++) {
+        document.getElementById("cards-el").textContent += cards[i] + " ";
+    }
+
+    if (sum < 21) {
+        message = "Do you want to draw a new card? 🙂";
+        isAlive = true;
+        document.getElementById("message-el").textContent = message;
+    } else if (sum === 21) {
+        message = "Wohooo! You've got BlackJack! 🥳";
+        hasBlackJack = true;
+        isAlive = false;
+        document.getElementById("message-el").textContent = message;
+        
+        updateChips(100);
+
+        setTimeout(() => {
+            if (player.chips > 0) {
+                resetGame();
+            } else {
+                enterDebtState();
+            }
+        }, 1500);
+    } else {
+        message = "You are out of the game! 😭";
+        isAlive = false;
+        document.getElementById("message-el").textContent = message;
+        
+        updateChips(-100);
+        
+        setTimeout(() => {
+            if (player.chips > 0) {
+                resetGame();
+            } else {
+                enterDebtState();
+            }
+        }, 1500);
+    }
+}
+
+function enterDebtState() {
+    isAlive = false; 
+    document.getElementById("message-el").textContent = "🚫 Sorry, you are in debt! Please use the 'Buy-In' option to add funds and continue playing. 🚫";
+    document.getElementById("cards-el").textContent = "Cards: ";
+    document.getElementById("sum-el").textContent = "0";
+    
+    document.getElementById("start-el").disabled = true;
+    document.getElementById("new-card-el").disabled = true;
+    if (document.getElementById("buy-in-el")) {
+        document.getElementById("buy-in-el").disabled = false;
+    }
 }
 
 
-function resetGame() {
-    document.getElementById("cards-el").textContent = "Cards: ";
-
-    document.getElementById("sum-el").textContent = 0; 
+function start_game() {
+    if (player.chips <= 0) {
+        document.getElementById("message-el").textContent = "🚫 You need more chips to play! Use 'Buy-In'.";
+        return; 
+    }
 
     cards = [];
-    sum = 0;
     hasBlackJack = false;
-    isAlive = false; 
-    
-    document.getElementById("start-el").disabled = false;
+    isAlive = true;  
 
-    document.getElementById("message-el").textContent = "Click 'START GAME' to play a new round!";
-}
-
-function start_game(){
-    cards = []
-    hasBlackJack = false
-    
     gameDeck = createDeck();
     shuffleDeck(gameDeck);
 
     cards.push(getRandomCard(), getRandomCard());
 
-    calculateScore(); 
+    calculateScore();
     render_game();
 
-    document.getElementById("start-el").disabled = true 
+    document.getElementById("start-el").disabled = true;
+    document.getElementById("new-card-el").disabled = false;
 }
 
-function render_game(){
-
-    if (sum < 21) {
-        message = "Do you want to draw a new card? 🙂"
-        isAlive = true
-    }
-    else if(sum === 21) {
-        message = "Wohooo! You've got BlackJack! 🥳"
-        hasBlackJack = true
-        isAlive = false
-        updateChips(100); 
-        setTimeout(resetGame, 1500);
-    }
-    else {
-        message = "You are out of the game! 😭"
-        isAlive = false
-        updateChips(-10); 
-        setTimeout(resetGame, 1500);
-    }
-
-    document.getElementById("message-el").textContent = message
-    document.getElementById("sum-el").textContent = sum
-    
-    document.getElementById("cards-el").textContent = "Cards: "
-    for(let i = 0; i < cards.length; i++){
-        document.getElementById("cards-el").textContent += cards[i] + " "
-    }
-}
-
-
-function new_card(){
-
-    if(isAlive == true && sum < 21){
-        let card = getRandomCard()
-        cards.push(card)
+function new_card() {
+    if (isAlive && sum < 21 && player.chips > 0) {
+        let card = getRandomCard();
+        cards.push(card);
         
         calculateScore(); 
         render_game();
+    } else if (player.chips <= 0) {
+        document.getElementById("message-el").textContent = "🚫 You need more chips to play! Use 'Buy-In'.";
     }
+}
+
+function resetGame() {
+    if (player.chips <= 0) return;
+
+    cards = [];
+    sum = 0;
+    hasBlackJack = false;
+    isAlive = false;
+    message = "";
+
+    document.getElementById("cards-el").textContent = "Cards: ";
+    document.getElementById("sum-el").textContent = "0";
+    document.getElementById("message-el").textContent = "Ready to play?";
+
+    document.getElementById("start-el").disabled = false;
+    document.getElementById("new-card-el").disabled = true;
 }
 
 function Buy_in() {
-    const chipsInput = prompt("Amount Buy-in: ")
+    const chipsInput = prompt("Amount to Buy-in: ");
 
-    if(chipsInput === null || chipsInput.trim() === ""){
-        alert("Buy in cancelled!!")
-        return
+    if (chipsInput === null || chipsInput.trim() === "") {
+        alert("Buy-in cancelled!");
+        return;
     }
 
-    const newchipsAmount = parseInt(chipsInput)
+    const newChipsAmount = parseInt(chipsInput.trim());
 
-    if(isNaN(chipsInput) || chipsInput <= 0){
-        alert("Please enter the valid amount")
-        return
+    if (isNaN(newChipsAmount) || newChipsAmount <= 0) { 
+        alert("Please enter a valid amount greater than 0.");
+        return;
     }
 
-    player.chips = newchipsAmount
+    player.chips = newChipsAmount;
 
-    localStorage.setItem("blackJackChips", player.chips)
+    localStorage.setItem("blackJackChips", player.chips);
     document.getElementById("player-el").textContent = player.name + ": $" + player.chips;
-    
+
+    document.getElementById("start-el").disabled = false;
+    document.getElementById("new-card-el").disabled = true;
+    if (document.getElementById("buy-in-el")) {
+        document.getElementById("buy-in-el").disabled = false;
+    }
+
+    document.getElementById("message-el").textContent = "Welcome back! Ready to play?";
+    resetGame(); 
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    if (player.chips <= 0) {
+        document.getElementById("start-el").disabled = true;
+        document.getElementById("new-card-el").disabled = true;
+        if (document.getElementById("buy-in-el")) {
+            document.getElementById("buy-in-el").disabled = false;
+        }
+        document.getElementById("message-el").textContent = "🚫 You need more chips to play! Use 'Buy-In'.";
+        document.getElementById("cards-el").textContent = "Cards: ";
+        document.getElementById("sum-el").textContent = "0";
+    } else {
+        document.getElementById("start-el").disabled = false;
+        document.getElementById("new-card-el").disabled = true;
+        if (document.getElementById("buy-in-el")) {
+            document.getElementById("buy-in-el").disabled = false;
+        }
+        document.getElementById("message-el").textContent = "Ready to play?";
+    }
+});
