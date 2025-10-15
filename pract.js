@@ -53,7 +53,6 @@ function drawCard(){
   return gameDeck.shift();
 }
 
-// calculate sum with Ace adjustments
 function calculateSum(hand){
   let sum = 0, aceCount = 0;
   hand.forEach(c => {
@@ -67,7 +66,6 @@ function calculateSum(hand){
   return sum;
 }
 
-// render player & dealer hands
 function renderHands(showDealer = false){
   // player
   document.getElementById("cards-el").textContent = "Cards: " + (playerCards.length ? playerCards.map(c => c.rank).join(" ") : "");
@@ -86,7 +84,6 @@ function renderHands(showDealer = false){
   }
 }
 
-// start a new round
 function startGame(){
   if (player.chips <= 0){
     document.getElementById("message-el").textContent = "🚫 You need more chips to play! Use 'BUY-IN'.";
@@ -122,7 +119,6 @@ function startGame(){
 }
 
 
-// player hits
 function playerHit() {
   if (!playerAlive) return;
   playerCards.push(drawCard());
@@ -147,20 +143,18 @@ function playerHit() {
 }
 
 
-// player stands - dealer plays
 function playerStand(){
   if (!playerAlive) return;
   playerAlive = false;
   dealerPlay();
 }
 
-// dealer automaton
+
 function dealerPlay(){
   dealerAlive = true;
   renderHands(true);
   dealerSum = calculateSum(dealerCards);
 
-  // Dealer hits until 17 or more (soft 17 policy here: stops at 17)
   while (dealerSum < 17){
     dealerCards.push(drawCard());
     dealerSum = calculateSum(dealerCards);
@@ -170,7 +164,6 @@ function dealerPlay(){
   endRound();
 }
 
-// determine winner and update chips
 function endRound(){
   renderHands(true);
 
@@ -200,7 +193,6 @@ function endRound(){
   standBtn.disabled = true;
   startBtn.disabled = false;
 
-  // if out of money, disable start/hit/stand and enable buy-in
   if (player.chips <= 0){
     startBtn.disabled = true;
     hitBtn.disabled = true;
