@@ -1,20 +1,42 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <link rel = "stylesheet" href="index.css">
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="index.css">
+    <title>Blackjack Dealer Mode</title>
+</head>
 
-    <body>
-        <h1>BlackJack</h1>
-        <p id = "message-el">Want to play a Round?</p>
-        <p id = "cards-el">Cards: </p>
-        <p id = "sum-el">Sum : </p>
+<body>
 
-        <button onclick = "start_game()" id = "start-el">Start game</button>
-        <button onclick = "new_card()" >New Card</button>
-        <button onclick = "Buy_in()">Buy-In</button>
-        
-        <p id ="player-el"></p>
-        
-        <script src = "pract.js"></script>
-    </body>
+    <h1>♠ Blackjack ♣</h1>
+
+    <div id="game-area">
+    
+        <div class="section">
+            <h2>Dealer</h2>
+            <div id="dealer-cards" class="cards">Cards: </div>
+            <div id="dealer-sum" class="score">Sum: 0</div>
+        </div>
+
+        <div class="section">
+            <h2>Player</h2>
+            <div id="cards-el" class="cards">Cards: </div>
+            <div id="sum-el" class="score">Sum: 0</div>
+        </div>
+
+        <div id="message-el">Ready to play?</div>
+
+        <div>
+            <button id="start-el">START GAME</button>
+            <button id="new-card-el" disabled>HIT</button>
+            <button id="stand-el" disabled>STAND</button>
+            <button id="buy-in-el">BUY-IN</button>
+        </div>
+
+        <div id="player-el"></div>
+    </div>
+
+    <script src="pract.js"></script>
+
+</body>
 </html>
