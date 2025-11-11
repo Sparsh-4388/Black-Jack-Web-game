@@ -18,6 +18,7 @@ This isn’t just a static demo — it’s a functional mini-casino where you ca
 ✨ Clean UI – Minimal interface showing player & dealer hands, sums, and messages dynamically updated.
 
 🕹️ How to Play
+
 Click Buy-In to start with some chips.
 
 Enter a bet amount and hit Start Game.
@@ -37,6 +38,9 @@ Run out of chips? Use Buy-In to recharge and keep playing.
 🛠️ Tech Stack
 
 HTML5 – UI and layout
+
 CSS3 – Styling and formatting
+
 JavaScript (ES6) – Game logic and state management
+
 LocalStorage API – Persistent chip tracking
