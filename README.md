@@ -1,45 +1,30 @@
-<<<<<<< HEAD
-# Black-Jack-Web-gamegit pull 
-=======
-# Black-Jack-Web-game
+♠️ Blackjack – JS Casino Game
 
-# Single Player Blackjack
+Welcome to Blackjack, a fully interactive browser-based card game built with HTML, CSS, and JavaScript.
+This isn’t just a static demo — it’s a functional mini-casino where you can bet chips, hit or stand, face the dealer, and try your luck to hit 21 🎯
 
-A simplified, single-player version of Blackjack where the challenge is to reach 21 without going over. The game also includes a **buy-in system** where players start with chips and use them to play rounds.
+🎮 Features
 
-## Features
+🃏 Playable Deck System – Cards are dynamically generated, shuffled, and dealt from a full deck.
+💰 Chips & Betting – Start with a chip balance, place your bets, and win or lose based on the outcome.
+🧠 Dealer AI – Dealer automatically draws until reaching 17 or higher, following real blackjack rules.
+⚡ Instant Blackjack Detection – Hit a natural 21 and win instantly!
+🔄 Game Flow Control – Start, hit, stand, or buy back in when out of chips.
+✨ Clean UI – Minimal interface showing player & dealer hands, sums, and messages dynamically updated.
 
-* Single-player Blackjack (no dealer).
-* Buy-in system with starting chips.
-* Random card draws with correct Blackjack values:
+🕹️ How to Play
+Click Buy-In to start with some chips.
+Enter a bet amount and hit Start Game.
+Decide your move:
+🟩 NEW CARD (Hit): Draw another card.
+🟥 STAND: Hold your hand and let the dealer play.
+If your hand exceeds 21 → you’re busted 💥
+If your hand beats the dealer or hits 21 → you win your bet 🎉
+Run out of chips? Use Buy-In to recharge and keep playing.
 
-  * Number cards = face value
-  * Face cards = 10
-  * Ace = 1 or 11 (whichever fits best).
-* Automatic bust detection (over 21 = instant loss).
-* Instant win if the player hits exactly 21.
-* Player balance updates after each round.
+🛠️ Tech Stack
 
-## Rules
-
-1. Player buys in with chips before starting.
-2. Each round begins with two random cards.
-3. Player can *Hit* (draw another card) or *Stand* (end the round).
-4. If the player’s total exceeds 21, they bust and lose their buy-in for that round.
-5. If the player hits 21, they instantly win and their balance increases.
-6. If the player stands below 21, the outcome depends on how close they are to 21.
-
-## Objective
-
-Play strategically, manage your chips wisely, and aim to hit 21 without going over.
-
-## Tech Stack
-
-* HTML, CSS, JavaScript
-
-## How to Run
-
-1. Clone the repository.
-2. Open `index.html` in your browser.
-3. Buy in, play your hand, and test your luck with 21!
->>>>>>> 6dcf2dd75412eabaaa0938ea3512da469ae348ee
+HTML5 – UI and layout
+CSS3 – Styling and formatting
+JavaScript (ES6) – Game logic and state management
+LocalStorage API – Persistent chip tracking
